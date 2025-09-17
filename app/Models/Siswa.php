@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 
 class Siswa extends Model
 {
-    use HasUuids;
+    use HasUuids, SoftDeletes;
     
     protected $table = 'siswa';
     protected $keyType = 'string';

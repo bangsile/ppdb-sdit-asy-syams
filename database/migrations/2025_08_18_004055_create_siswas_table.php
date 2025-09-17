@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('no_pendaftaran')->unique();
 
             $table->string('nama');
-            $table->enum('jenis_kelamin', ['L', 'P']);
+            $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
             $table->string('nisn')->nullable();
 
             // NIK terenkripsi + hash
@@ -47,7 +47,10 @@ return new class extends Migration {
             $table->integer('anak_ke')->nullable();
 
             $table->enum('status', ['calon', 'diterima', 'ditolak', 'lulus'])->default('calon');
+            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

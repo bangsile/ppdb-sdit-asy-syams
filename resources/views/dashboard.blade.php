@@ -1,18 +1,14 @@
 <x-layouts.app :title="__('Dashboard')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-        </div>
-        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-            <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+        <div class="relative rounded-xl border border-neutral-200 p-7">
+            <h1 class="font-medium text-lg">Selamat Datang di Sistem PPDB SDIT Asy-Syams Tidore</h1>
+            @if (!$siswa)
+                <p class="mt-10">Anda belum melakukan pendaftaran peserta didik baru. Silahkan daftar terlebih dahulu.
+                </p>
+                <flux:button href="{{ route('pendaftaran') }}" class="mt-2" variant="primary" color="emerald">
+                    Daftar di sini
+                </flux:button>
+            @endif
         </div>
     </div>
 </x-layouts.app>

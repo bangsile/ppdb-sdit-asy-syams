@@ -13,12 +13,12 @@ return new class extends Migration {
         Schema::create('orang_tua', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('siswa_id')->constrained('siswa')->onDelete('cascade');
-            $table->enum('hubungan', ['ayah', 'ibu', 'wali']);
+            $table->enum('hubungan', ['Ayah', 'Ibu', 'Wali']);
             $table->string('nama');
             
             // NIK terenkripsi + hash (unik)
             $table->text('nik_encrypted');
-            $table->string('nik_hash')->unique();
+            $table->string('nik_hash');
 
             $table->string('tempat_lahir')->nullable();
             $table->date('tanggal_lahir')->nullable();
