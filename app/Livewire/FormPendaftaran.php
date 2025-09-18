@@ -226,9 +226,9 @@ class FormPendaftaran extends Component
             'no_hp' => $this->noHpIbu
         ]);
 
-        $pathAkta = $this->aktaKelahiran->storeAs("berkas-siswa/{$siswa->no_pendaftaran}", "akta-kelahiran-{$siswa->no_pendaftaran}.pdf");
-        $pathKk = $this->kartuKeluarga->storeAs("berkas-siswa/{$siswa->no_pendaftaran}", "kartu-keluarga-{$siswa->no_pendaftaran}.pdf");
-        $pathFoto = $this->pasFoto->storeAs("berkas-siswa/{$siswa->no_pendaftaran}", "pas-foto-{$siswa->no_pendaftaran}.jpg");
+        $pathAkta = $this->aktaKelahiran->store("berkas-siswa/{$siswa->no_pendaftaran}");
+        $pathKk = $this->kartuKeluarga->store("berkas-siswa/{$siswa->no_pendaftaran}");
+        $pathFoto = $this->pasFoto->store("berkas-siswa/{$siswa->no_pendaftaran}");
 
         BerkasSiswa::create([
             'siswa_id' => $siswa->id,
@@ -237,7 +237,7 @@ class FormPendaftaran extends Component
             'pas_foto' => $pathFoto
         ]);
 
-        return $this->redirect(route('dashboard'), true);
+        return $this->redirect(route('pendaftaran.detail', $siswa->no_pendaftaran), true);
     }
 
     public function render()

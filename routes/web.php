@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\DetailPendaftaran;
 use App\Livewire\FormPendaftaran;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -24,6 +25,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', Password::class)->name('settings.password');
 
     Route::get('form-pendaftaran', FormPendaftaran::class)->name('pendaftaran');
+    Route::get('pendaftaran/{no_pendaftaran}/detail', DetailPendaftaran::class)->name('pendaftaran.detail');
+
+    Route::get('berkas/{no_pendaftaran}/{nama_file}', function ($no_pendaftaran, $nama_file) {
+        $user = Auth::user();
+        if ($user->getRoleNames()->first() == 'admin ') {
+            return Storage::response('berkas-siswa/' . $no_pendaftaran . '/' . $nama_file);
+        } else {
+            $siswa = Siswa::where('no_pendaftaran', $no_pendaftaran)->firstOrFail();
+            if ($siswa->user_id !== $user->id) {
+                abort(404);
+            }
+            return Storage::response('berkas-siswa/' . $no_pendaftaran . '/' . $nama_file);
+        }
+    })->name('berkas.show');
 });
 
 require __DIR__ . '/auth.php';

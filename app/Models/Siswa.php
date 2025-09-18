@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class Siswa extends Model
 {
     use HasUuids, SoftDeletes;
-    
+
     protected $table = 'siswa';
     protected $keyType = 'string';
     public $incrementing = false;
@@ -47,7 +47,8 @@ class Siswa extends Model
             // Auto-generate no_pendaftaran (cth: 2025-0001)
             $tahun = now()->year;
             $count = self::whereYear('created_at', $tahun)->count() + 1;
-            $model->no_pendaftaran = sprintf("%s-%04d", $tahun, $count);
+            $randomLetters = Str::upper(Str::random(2)); // 2 huruf random
+            $model->no_pendaftaran = sprintf("%s-%04d%s", $tahun, $count, $randomLetters);
         });
     }
 
@@ -94,14 +95,14 @@ class Siswa extends Model
     }
 
     // Relasi
-    public function orangTua()
+    public function orangtua()
     {
         return $this->hasMany(OrangTua::class, 'siswa_id', 'id');
     }
 
     public function berkas()
     {
-        return $this->hasMany(BerkasSiswa::class, 'siswa_id', 'id');
+        return $this->hasOne(BerkasSiswa::class, 'siswa_id', 'id');
     }
 
     public function pembayaran()
