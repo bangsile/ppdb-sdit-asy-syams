@@ -8,7 +8,7 @@
             Silahkan lakukan pembayaran dan upload bukti pembayaran untuk menyelesaikan proses pendaftaran.
         </flux:callout.text>
 
-        <x-slot name="actions">
+        <x-slot name="actions" class="flex flex-wrap">
             <flux:button>Detail Pembayaran</flux:button>
             <flux:button variant="primary" href="#" class="">Upload Bukti Bayar</flux:button>
         </x-slot>
@@ -43,14 +43,13 @@
             <p class="font-medium pb-2">Lingkar Kepala</p>
             <p>{{ $siswa->lingkar_kepala }} cm</p>
 
-            <p class="font-medium pb-2 pt-2">Alamat</p>
-            <p></p>
-            <p class="font-medium pb-2">Jalan</p>
-            <p>{{ $siswa->jalan ?: '-' }}</p>
-            <p class="font-medium pb-2">Kelurahan</p>
-            <p>{{ $siswa->kelurahan }}</p>
-            <p class="font-medium pb-2">RT/RW</p>
-            <p>{{ $siswa->rt_rw }}</p>
+            <p class="font-medium pb-2">Alamat</p>
+            <p>
+                {{ $siswa->jalan ? 'Jl. ' . $siswa->jalan . ', ' : '' }}
+                {{ 'RT ' . $siswa->rt . '/RW ' . $siswa->rw . '  Kel. ' . $siswa->kelurahan }}
+            </p>
+            <p class="font-medium pb-2">Jarak rumah ke sekolah</p>
+            <p>{{ $siswa->jarak_rumah }} km</p>
 
             <flux:separator class="my-3" />
             <flux:separator class="my-3" />
@@ -84,9 +83,11 @@
             </div>
         </div>
     </div>
-    
+
     <div class="flex items-center mt-2 gap-2">
-        <flux:button icon="pencil-square" class="">Edit Data</flux:button>
+        <flux:button icon="pencil-square" wire:navigate href="{{ route('pendaftaran.edit', $siswa->no_pendaftaran) }}">
+            Edit Data
+        </flux:button>
         <flux:modal.trigger name="berkas">
             <flux:button>Berkas</flux:button>
         </flux:modal.trigger>
@@ -115,7 +116,7 @@
     </flux:modal>
 
     {{-- Modal Berkas --}}
-    <flux:modal name="berkas" class="md:w-96">
+    <flux:modal name="berkas" class="md:w-96" @close="resetForm">
         <form wire:submit="simpanBerkas">
             {{-- Berkas --}}
             <div class="grid grid-cols-1 gap-4 overflow-hidden">

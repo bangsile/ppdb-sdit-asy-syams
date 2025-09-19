@@ -39,6 +39,8 @@ class Siswa extends Model
         'user_id'
     ];
 
+    protected $appends = ['rt', 'rw'];
+
     // Boot method untuk UUID & no_pendaftaran
     protected static function boot()
     {
@@ -92,6 +94,17 @@ class Siswa extends Model
     public function getNoRegAktaAttribute()
     {
         return Crypt::decryptString($this->attributes['no_reg_akta_encrypted']);
+    }
+
+    // Accessor RT/RW
+    public function getRtAttribute()
+    {
+        return explode('/', $this->rt_rw)[0] ?? null;
+    }
+
+    public function getRwAttribute()
+    {
+        return explode('/', $this->rt_rw)[1] ?? null;
     }
 
     // Relasi
