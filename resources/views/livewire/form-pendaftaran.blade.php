@@ -73,9 +73,14 @@
 
                 </div>
             </div>
-            <flux:button type="submit" class="mt-5 float-right" variant="primary" color="emerald">
-                Selanjutnya
-            </flux:button>
+            <div class="flex items-center justify-end gap-5 mt-5">
+                @if ($errors->any())
+                    <p class="text-sm text-red-600">Gagal. Harap isi formulir dengan benar.</p>
+                @endif
+                <flux:button type="submit" class="mt-5 float-right" variant="primary" color="emerald">
+                    Selanjutnya
+                </flux:button>
+            </div>
         </form>
     @endif
     @if ($step == 2)
