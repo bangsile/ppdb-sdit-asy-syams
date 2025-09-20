@@ -27,6 +27,12 @@ class OrangTua extends Model
         'no_hp'
     ];
 
+    // Scope
+    public function scopeHubungan($query, $hubungan)
+    {
+        return $query->where('hubungan', $hubungan);
+    }
+
     // Mutator + Accessor untuk NIK
     public function setNikAttribute($value)
     {
