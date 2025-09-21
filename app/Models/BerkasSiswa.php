@@ -13,7 +13,7 @@ class BerkasSiswa extends Model
     protected $table = 'berkas_siswa';
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $fillable = ['siswa_id', 'akta_kelahiran', 'kartu_keluarga', 'pas_foto'];
+    protected $fillable = ['siswa_id', 'akta_kelahiran', 'kartu_keluarga', 'pas_foto', 'bukti_bayar'];
 
     public function siswa()
     {

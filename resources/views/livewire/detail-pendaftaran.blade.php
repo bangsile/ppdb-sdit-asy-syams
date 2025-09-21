@@ -5,13 +5,32 @@
     <flux:callout>
         <flux:callout.heading>Pendaftaran Berhasil</flux:callout.heading>
         <flux:callout.text>
-            Silahkan lakukan pembayaran dan upload bukti pembayaran untuk menyelesaikan proses pendaftaran.
+            <b>Status</b> :
+            @if ($siswa->status == 'calon')
+                @if (!$siswa->berkas->bukti_bayar)
+                    <span class="text-red-600">Belum melakukan pembayaran</span>
+                @else
+                    <span class="text-orange-600">Menunggu konfirmasi admin</span>
+                @endif
+            @elseif ($siswa->status == 'diterima')
+                <span class="text-emerald-600">Diterima</span>
+            @endif
         </flux:callout.text>
-
-        <x-slot name="actions" class="flex flex-wrap">
-            <flux:button>Detail Pembayaran</flux:button>
-            <flux:button variant="primary" href="#" class="">Upload Bukti Bayar</flux:button>
-        </x-slot>
+        @if (!$siswa->berkas->bukti_bayar)
+            <flux:callout.text>
+                Silahkan lakukan pembayaran dan upload bukti pembayaran untuk menyelesaikan proses pendaftaran.
+            </flux:callout.text>
+        @endif
+        @if ($siswa->status == 'calon')
+            <x-slot name="actions" class="flex flex-wrap">
+                <flux:modal.trigger name="detailbayar">
+                    <flux:button>Rincian Pembayaran</flux:button>
+                </flux:modal.trigger>
+                <flux:modal.trigger name="buktibayar">
+                    <flux:button variant="primary" href="#">Upload Bukti Bayar</flux:button>
+                </flux:modal.trigger>
+            </x-slot>
+        @endif
     </flux:callout>
     <x-notification class="fixed z-50 right-5 bottom-5" />
 
@@ -152,5 +171,70 @@
                 </flux:button>
             @endif
         </form>
+    </flux:modal>
+
+    {{-- Modal Detail Pembayaran --}}
+    <flux:modal name="detailbayar">
+        <div>
+            <flux:heading size="lg">Rincian Pembayaran Uang Pangkal</flux:heading>
+            <div class="grid grid-cols-3 gap-y-1 mt-5">
+                @php
+                    $total = 0;
+                @endphp
+                @foreach ($uangPangkal as $item)
+                    @php
+                        $total += $item->nominal;
+                    @endphp
+                    <flux:text class="col-span-2 text-accent p-1">{{ $item->uraian }}</flux:text>
+                    <flux:text class="text-accent font-semibold p-1">{{ format_rupiah($item->nominal) }} </flux:text>
+                @endforeach
+                <flux:text class="col-span-2 text-accent font-semibold p-1 border-t">Total</flux:text>
+                <flux:text class="text-accent font-semibold p-1 border-t">{{ format_rupiah($total) }} </flux:text>
+            </div>
+            <flux:text class="mt-4">
+                Silahkan lakukan pembayaran ke no. rekening <b>{{ $rekening->nama_bank . ' ' . $rekening->no_rek }}
+                </b>
+                a.n.
+                <b> {{ $rekening->atas_nama_rek }}</b>, kemudian upload bukti bayar melalui sistem.
+            </flux:text>
+        </div>
+    </flux:modal>
+
+    {{-- Modal Upload Bukti Bayar --}}
+    <flux:modal name="buktibayar" class="md:w-96">
+        <div>
+            <flux:heading size="lg">Upload Bukti Pembayaran</flux:heading>
+            @if ($siswa->berkas->bukti_bayar)
+                <flux:text class="mt-2">
+                    Anda sudah mengupload bukti pembayaran. <br> Anda masih bisa menggantinya jika merasa telah
+                    melakukan
+                    kesalahan.
+                </flux:text>
+            @endif
+            <form wire:submit="simpanBuktiBayar" class="mt-5">
+                {{-- Ganti Foto --}}
+                <flux:field>
+                    <flux:input class="-mb-3" type="file" wire:model="buktiBayar" />
+                    <flux:description class="text-xs">*JPG, JPEG (max:1024)</flux:description>
+                    <flux:error name="buktiBayar" />
+                    @if ($siswa->berkas->bukti_bayar)
+                        <flux:button size="xs" class="w-24 ms-2" variant="primary" color="blue"
+                            target="_blank"
+                            href="{{ route('berkas.show', [$siswa->no_pendaftaran, basename($siswa->berkas->bukti_bayar)]) }}">
+                            Lihat File
+                        </flux:button>
+                    @endif
+                </flux:field>
+                @if ($buktiBayar)
+                    <flux:button type="submit" class="mt-7" variant="primary" color="emerald">
+                        Simpan
+                    </flux:button>
+                @else
+                    <flux:button type="submit" class="mt-7" variant="primary" color="emerald" disabled>
+                        Simpan
+                    </flux:button>
+                @endif
+            </form>
+        </div>
     </flux:modal>
 </div>

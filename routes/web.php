@@ -31,6 +31,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('berkas/{no_pendaftaran}/{nama_file}', function ($no_pendaftaran, $nama_file) {
         $user = Auth::user();
+        $path = 'berkas-siswa/' . $no_pendaftaran . '/' . $nama_file;
+
+        // Cek apakah file ada
+        if (!Storage::exists($path)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
         if ($user->getRoleNames()->first() == 'admin ') {
             return Storage::response('berkas-siswa/' . $no_pendaftaran . '/' . $nama_file);
         } else {
