@@ -5,6 +5,7 @@ use App\Livewire\EditPendaftar;
 use App\Livewire\FormPendaftaran;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
+use App\Livewire\StatusPendaftaran;
 use App\Models\Siswa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('form-pendaftaran', FormPendaftaran::class)->name('pendaftaran');
     Route::get('pendaftaran/{no_pendaftaran}/detail', DetailPendaftaran::class)->name('pendaftaran.detail');
     Route::get('pendaftaran/{no_pendaftaran}/edit', EditPendaftar::class)->name('pendaftaran.edit');
+    Route::get('status-pendaftaran', StatusPendaftaran::class)->name('pendaftaran.status');
 
     Route::get('berkas/{no_pendaftaran}/{nama_file}', function ($no_pendaftaran, $nama_file) {
         $user = Auth::user();
